@@ -1,0 +1,136 @@
+.search-input {
+	width: 100% !important;
+	padding: 0px !important;
+	margin-right: 0px !important;
+	max-width: 98% !important;
+}
+
+.input-search-box {
+	height: 24px;
+	margin: 2px !important;
+	width: 480px !important;
+	margin-bottom: 0px !important;
+	margin-right: 0px !important;
+}
+
+.input-search-go {
+	height: 28px !important;
+	margin-top: 5px;
+}
+
+#logo {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    height: 24px;
+    width: 220px;
+    z-index: 1;
+    text-align: center;
+}
+
+#geocoder {
+    display: none !important;
+    position: absolute;
+    top: 30px;
+    height: 24px;
+    right: 0;
+    width: 300px;
+    z-index: 1;
+    padding: 2px 4px;
+    border: none;
+}
+
+
+/** */
+
+
+
+.actions {
+    width: 100%;
+    padding: 0 0 20px 0;
+}
+
+.actions span {
+    box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+    background: #fff;
+    color: #888;
+    font-weight: 700;
+    font-size: 12px;
+    font-size: 1.2rem;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+    padding: 5px 10px;
+    text-transform: uppercase;
+    margin: 3px;
+    border-radius: 3px;
+
+}
+
+.actions span:hover {
+    background: #f7f7f7;
+}
+
+.actions span:active {
+    background: #aaa;
+    color: #fff;
+    box-shadow: 0 1px 1px rgba(255,255,255,0.5);
+}
+
+.actions span.disabled {
+    opacity: 0.8;
+    color: #ddd;
+}
+
+.light {
+    padding: 60px 0 250px;
+}
+
+.light span {
+    background: #aaa;
+    color: #fff;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.3);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.2), 0 1px 1px rgba(255,255,255,0.8);
+}
+
+.light span:hover {
+    background: #444;
+}
+
+#nav-prev, #nav-next {
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+    line-height: 20px;
+}
+
+#close {
+    float: right;
+}
+
+.node-cards
+{
+    display: none;
+    position: absolute !important;
+    background: none !important;
+    background-color: transparent !important;
+
+}
+
+ul.baraja-container {
+    width: 300px;
+}
+.baraja-demo li img {
+    display: block;
+    height: 65% !important;
+}
+
+.baraja-demo h4 {
+    padding: 8px 10px 5px !important;
+    margin: 20px 3px 5px !important;
+}
+
+.baraja-demo p {
+
+     margin: 0px !important;
+}
