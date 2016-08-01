@@ -1,3 +1,7 @@
+/**
+ * Created by prakash on 7/30/16.
+ */
+
 /*
  * Star Wars opening crawl from 1977
  * 
@@ -29,6 +33,8 @@
  * timpietrusky.com
  * 
  */
+
+
 StarWars = (function() {
   
   /* 
@@ -64,6 +70,7 @@ StarWars = (function() {
       this.audio.currentTime = 0;
       this.reset();
       if(WE){
+        $('#geocoder').css({display:"block",zIndex:'1008'});
         initialize();
       }
     }, this));
@@ -91,12 +98,10 @@ new StarWars({
 ///
 
 
-/**
- * Created by prakash on 7/30/16.
- */
+
 var earth;
 var earthSize = 3;
-var startAnimate = false;
+var startAnimate = true;
 var accountMarker = {};
 var accounts = [];
 var accountMap = {};
@@ -113,8 +118,8 @@ function filter() {
     filterValues = searchString.toLowerCase().split(',');
   }
 
-  for( var name in accountMarker ) {
-    earth.removeMarker( accountMarker[name] );
+  for( var license in accountMarker ) {
+    earth.removeMarker( accountMarker[license] );
   }
 
   for( var i = 0; i < accounts.length; i++ ) {
@@ -125,11 +130,9 @@ function filter() {
       for( var j = 0; j < filterValues.length; j++ ) {
 
         var value = filterValues[j];
-        if( ( account.country && account.country.toLowerCase().indexOf( value ) != -1 ) ||
-            ( account.state && account.state.toLowerCase().indexOf( value ) != -1 ) ||
+        if( ( account.address && account.address.toLowerCase().indexOf( value ) != -1 ) ||
             ( account.name && account.name.toLowerCase().indexOf( value ) != -1 ) ||
-            ( account.city && account.city.toLowerCase().indexOf( value ) != -1 ) ||
-            ( account.type && account.type.toLowerCase().indexOf( value ) != -1 ) ||
+            ( account.category && account.category.toLowerCase().indexOf( value ) != -1 ) ||
             ( account.industry && account.industry.toLowerCase().indexOf( value ) != -1 ) ) {
 
           filterArray.push(account);
@@ -180,36 +183,59 @@ var moveCardsRef=null;
 
 function onEarthClick() {
   startAnimate = (startAnimate == true ) ? false : true;
-  for( var name in accountMarker ) {
-    accountMarker[name].closePopup();
+  for( var license in accountMarker ) {
+    accountMarker[license].closePopup();
   }
-
   var cardsContainer = $("#cards-container").css( {display:'none'});
 
-  if(setIntervalRef){
-    clearInterval(setIntervalRef);
-  }
-  //var cardsContainer = $("#cards-container").css("display","none");
-
 }
+
 
 
 function onMarkerClick(event,account) {
 
   startAnimate = false;
-  for( var name in accountMarker ) {
-    accountMarker[name].closePopup();
+  for( var license in accountMarker ) {
+    accountMarker[license].closePopup();
   }
+
+  var evt = window.event || arguments.callee.caller.arguments[0];
+
 
   //earth.setView
   //event.target.openPopup();
-  var x = event.clientX;     // Get the horizontal coordinate
-  var y = event.clientY;
+  var x = evt.clientX;     // Get the horizontal coordinate
+  var y = evt.clientY;
 
-  var cardsContainer = $("#cards-container").css( {display:'block',position:"absolute", top:x, left: x});;
+  /*var markup = "<li>Some content: ${$item.myMethod()}.<br/>"
+      + " More content: ${$item.myValue}.</li>";
+   */
 
 
-  //earth.panTo( [account.latitude, account.longitude], {duration: 1} );
+
+
+
+  var cardsContainer = $("#cards-container").css( {display:'block',position:"absolute", top:y-27, left: x-2,zIndex:1000});;
+
+  $( ".baraja-container" ).empty();
+  var markup="<li><h4>${name}</h4><p>${address}</p></li>";
+  //Modify the template here..
+
+  // Compile the markup as a named template
+  $.template( "cardsContentTemplate", markup );
+
+  // Render the template with the movies data
+  $.tmpl( "cardsContentTemplate", [account],
+      {
+      }
+  ).appendTo( ".baraja-container" );
+ // $(".node-cards").css( {display:'block',position:"absolute", top:y, left: x});;
+
+//debugger;
+  //earth.setView([account.latitude,account.longitude]);
+  //earth.panTo( [account.latitude, account.longitude], {duration: 0} );
+
+
 
   // var barajaEl = $('#baraja-el');
   //barajaEl.show();
@@ -217,14 +243,15 @@ function onMarkerClick(event,account) {
 
   if(baraja){
 
-   baraja.fan({
+  /* baraja.fan({
       speed:500,
       easing:'ease-out',
       range:80,
       direction:'right',
-      origin:{x:x,y:y},
-      center:true
-    });
+      origin:{x:x,y:y}
+      //,
+      //center:true
+    });*/
 
 
     /* baraja.fan( {
@@ -248,8 +275,6 @@ function onMarkerClick(event,account) {
 }
 
 function initialize() {
-
-  // return;
 
   earth = new WE.map('earth_div', {sky: true});
   earth.setView([30,-120], earthSize);
@@ -284,7 +309,10 @@ function initialize() {
   }
 
   var xmlhttp = new XMLHttpRequest();
-  var accountUrl = getContextPath() + "/data/account.json";
+  var accountUrl = getContextPath() + "/account.json";
+
+  //var xmlhttp = new XMLHttpRequest();
+ // var accountUrl = getContextPath() + "/account.json";
 
   xmlhttp.onreadystatechange = function() {
 
@@ -307,36 +335,17 @@ function getMarkerClickDelegate(a, b) {
 
 function processAccount(accs) {
 
+
   accountMarker = {};
   for( var i = 0; i < accs.length; i++ ) {
 
     var acc = accs[i];
     var marker = WE.marker([acc.latitude, acc.longitude], 'resources/images/map-of-orange-pin-icon-5081.png', 24, 24).addTo(earth);
-
     marker.on('click', getMarkerClickDelegate(event,acc));
-
-
-    accountMarker[acc.name] = marker;
-    accountMap[acc.name] = acc;
-
-    /*
-    var htmlContent = "<div onmouseover='mouseOver();' onmouseout='mouseOut();'>";
-    if( acc.logo && acc.logo != "" ) {
-      htmlContent = htmlContent + "<b><img src='" + acc.logo + "'/>" + acc.name + "</b>";
-    } else {
-      htmlContent = htmlContent + "<b>" + acc.name + "</b>";
-    }
-
-    if( acc.description && acc.description != "" ) {
-      htmlContent = htmlContent + "<br>" + acc.description;
-    }
-
-    htmlContent = htmlContent + "<br>"+acc.street+"<br>"+acc.city+"<br>"+acc.state + ", " + acc.zip +"</div>";
-
-    marker.bindPopup(htmlContent, {maxWidth: 180, closeButton: false});
-    */
-
+    accountMarker[acc.license] = marker;
+    accountMap[acc.license] = acc;
   }
+
 }
 
 

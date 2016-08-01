@@ -1,5 +1,12 @@
-@import url(g-font-01.woff2);
-@import url(g-font-02.woff2);
+@import url('g-font-01.woff2');
+@import url('g-font-02.woff2');
+
+
+@font-face {
+  font-family: "StarWars";
+  src: url('Starjout.ttf') format("truetype");
+}
+
 html,
 body {
   width: 100%;
@@ -39,6 +46,8 @@ body {
           animation: intro 6s ease-out 1s;
 }
 .starwars .logo {
+  width: 1068px;
+  font-family: StarWars !important;
   padding-top: 60px !important;
   opacity: 0;
   -webkit-animation: logo 9s ease-out 9s;
@@ -218,3 +227,19 @@ svg:not(:root) {
 
 
 
+.logo-class
+{
+  position: absolute;
+  width: 2.6em;
+  left: 50%;
+  top: 25%;
+  font-size: 10em;
+  text-align: center;
+  margin-left: -1.3em;
+  line-height: 0.8em;
+  letter-spacing: -0.05em;
+  color: #000;
+  text-shadow: -2px -2px 0 #ff6, 2px -2px 0 #ff6, -2px 2px 0 #ff6, 2px 2px 0 #ff6;
+  opacity: 0;
+  z-index: 1;
+}

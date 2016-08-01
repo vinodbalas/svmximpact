@@ -29,7 +29,7 @@
 }
 
 #geocoder {
-    display: none !important;
+    display: none;
     position: absolute;
     top: 30px;
     height: 24px;
