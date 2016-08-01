@@ -18,7 +18,7 @@
 	margin-top: 5px;
 }
 
-#logo {
+#logoinearth {
     position: absolute;
     top: 30px;
     left: 0;
@@ -26,6 +26,7 @@
     width: 220px;
     z-index: 1;
     text-align: center;
+    display: none;
 }
 
 #geocoder {
@@ -39,6 +40,7 @@
     padding: 2px 4px;
     border: none;
 }
+
 
 
 /** */

@@ -70,6 +70,8 @@ StarWars = (function() {
       this.audio.currentTime = 0;
       this.reset();
       if(WE){
+
+        $('#logoinearth').css({display:"block",zIndex:'1009'});
         $('#geocoder').css({display:"block",zIndex:'1008'});
         initialize();
       }
