@@ -243,3 +243,29 @@ svg:not(:root) {
   opacity: 0;
   z-index: 1;
 }
+
+@keyframes mymove
+{
+  from {background:url('../images/bg.jpg');}
+  to {background:#fff url('../images/bg.jpg') repeat-x ;opacity: .5}
+}
+@-webkit-keyframes mymove
+{
+  from {background:url('../images/bg.jpg');}
+  to {background:#fff url('../images/bg.jpg') repeat-x; opacity: 1}
+}
+
+body {
+  padding: 0;
+  background: #fff url('../images/bg.jpg') repeat-x;
+
+  /*animation-name:mymove;
+  animation-duration:1s;
+  animation-direction:alternate;
+  animation-iteration-count:infinite;
+  -webkit-animation-name:mymove;
+  -webkit-animation-duration:1s;
+  -webkit-animation-direction:alternate;
+  -webkit-animation-iteration-count:infinite;
+  */
+}

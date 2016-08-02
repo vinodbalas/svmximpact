@@ -27,10 +27,10 @@
 
   </head>
 
-  <body onload="">
+  <body onload="" >
 
   <!-- Starwars -->
- <article class="starwars">
+ <article class="starwars starwars-bg" >
   <audio preload="auto">
     <source src="resources/audio/Star_Wars_original_opening_crawl_1977.ogg" type="audio/ogg" />
     <source src="resources/audio/Star_Wars_original_opening_crawl_1977.mp3" type="audio/mpeg" />
@@ -55,9 +55,9 @@
 
       <p>
 
-          <span class="ribbon">ServiceMax</span>
+         ServiceMax
 
-           is delivering on this, and the <span class="ribbon">impact</span> is simple: lower costs, greater efficiency, happier customers and uncovering untapped revenue opportunities.
+           is delivering on this, and the impact is simple: lower costs, greater efficiency, happier customers and uncovering untapped revenue opportunities.
       </p>
 
         <p>
@@ -102,7 +102,7 @@
 
   <a href="http://www.servicemax.com/"  class="logoinearth" target="_blank" id="logoinearth"><img src="http://images.servicemax.com.s3.amazonaws.com/Logo-ServiceMax-landscape.svg"></a>
     <input type="search" name="geocoder" id="geocoder" label="Find a place..." placeholder="Search For Customers/Location..." aria-haspopup="true" onkeydown = "if (event.keyCode == 13) filter();"/>
-    <div id="earth_div" height="100%"/>
+    <div id="earth_div" height="100%"/> </div>
     <script>
         function mouseOver() {
             startAnimate = false;
@@ -115,6 +115,46 @@
 
 
 
+  <!-- Cards Template -->
+
+
+  <script id="cardTemplatesHtml" type="text/x-jquery-tmpl">
+    <li>
+        {{if logo}}
+      <img src="${logo}" height="30" width="130" style="height:35% !important"/>
+        {{/if}}
+        <h4>${name}
+            /${industry}/
+            ${category}
+        </h4>
+        <p>${address}</p>
+
+       </li>
+
+    {{if images.length >0 }}
+     {{each images}}
+        <li>
+            <img src="${$value}"  alt="" height="30" width="130"/>
+        </li>
+        {{/each}}
+    {{/if}}
+
+
+    {{if videos}}
+    {{each videos}}
+        <li>
+        <iframe  src="${$value}" alt="" style="height:50%" ></iframe>
+        </li>
+        {{/each}}
+    {{/if}}
+
+
+
+
+
+</script>
+
+  <!-- -->
 
 
 

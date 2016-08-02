@@ -59,18 +59,28 @@ StarWars = (function() {
     //debugger;
 
     // Start the animation on click
-    this.start.bind('click', $.proxy(function() {
+   /* this.start.bind('click', $.proxy(function() {
       this.start.hide();
       this.audio.play();
       this.el.append(this.animation);
     }, this));
-    
+    */
+  /** Auto Start **/
+    setTimeout($.proxy(function() {
+      this.start.hide();
+      this.audio.play();
+      this.el.append(this.animation);
+    }, this),2000);
+
+
+    /** */
+
     // Reset the animation and shows the start screen
     $(this.audio).bind('ended', $.proxy(function() {
       this.audio.currentTime = 0;
       this.reset();
       if(WE){
-
+        $("body").stop();
         $('#logoinearth').css({display:"block",zIndex:'1009'}).show('slow');
         $('#geocoder').css({display:"block",zIndex:'1008'}).show('slow');
         initialize();
@@ -220,7 +230,7 @@ function onMarkerClick(event,account) {
   var cardsContainer = $("#cards-container").css( {display:'block',position:"absolute", top:y-27, left: x-2,zIndex:1000});;
 
   $( ".baraja-container" ).empty();
-  var markup="<li><h4>${name}</h4><p>${address}</p></li>";
+  /*var markup="<li><h4>${name}</h4><p>${address}</p></li>";
   //Modify the template here..
 
   // Compile the markup as a named template
@@ -231,7 +241,11 @@ function onMarkerClick(event,account) {
       {
       }
   ).appendTo( ".baraja-container" );
- // $(".node-cards").css( {display:'block',position:"absolute", top:y, left: x});;
+*/
+
+  $( "#cardTemplatesHtml" ).tmpl( account ).appendTo( ".baraja-container" ,account);
+
+  $(".node-cards").css( {display:'block',position:"absolute", top:y, left: x});;
 
 //debugger;
   //earth.setView([account.latitude,account.longitude]);
@@ -239,9 +253,9 @@ function onMarkerClick(event,account) {
 
 
 
-  // var barajaEl = $('#baraja-el');
+  var barajaEl = $('#baraja-el');
   //barajaEl.show();
-  //var baraja = barajaEl.baraja();
+ var baraja = barajaEl.baraja();
 
   if(baraja){
 
@@ -338,6 +352,12 @@ function getMarkerClickDelegate(a, b) {
 function processAccount(accs) {
 
 
+  //Uncomment to see only with some image logos
+  /*accs=accs.filter(function(acc){
+
+    if(acc.logo) return acc;
+  });
+  */
   accountMarker = {};
   for( var i = 0; i < accs.length; i++ ) {
 
