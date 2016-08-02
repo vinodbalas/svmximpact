@@ -71,8 +71,8 @@ StarWars = (function() {
       this.reset();
       if(WE){
 
-        $('#logoinearth').css({display:"block",zIndex:'1009'});
-        $('#geocoder').css({display:"block",zIndex:'1008'});
+        $('#logoinearth').css({display:"block",zIndex:'1009'}).show('slow');
+        $('#geocoder').css({display:"block",zIndex:'1008'}).show('slow');
         initialize();
       }
     }, this));
