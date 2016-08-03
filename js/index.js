@@ -123,66 +123,69 @@ var setIntervalRef=null;
 
 function filter() {
 
-  var filterArray = [];
-  var filterValues = [];
-  var searchString = document.getElementById("geocoder").value.trim();
-  if( searchString != '' ) {
-    filterValues = searchString.toLowerCase().split(',');
-  }
+	var filterArray = [];
+	var filterValues = [];
+	var searchString = document.getElementById("geocoder").value.trim();
+	if( searchString != '' ) { 
+		filterValues = searchString.toLowerCase().split(',');
+	}
+	
+	for( var license in accountMarker ) {
+		earth.removeMarker( accountMarker[license] );
+	}
 
-  for( var license in accountMarker ) {
-    earth.removeMarker( accountMarker[license] );
-  }
+	var cardsContainer = $("#cards-container");
+	cardsContainer.hide();
 
-  for( var i = 0; i < accounts.length; i++ ) {
+	for( var i = 0; i < accounts.length; i++ ) {
 
-    var account = accounts[i];
-    if( filterValues && filterValues.length > 0 ) {
+		var account = accounts[i];
+		if( filterValues && filterValues.length > 0 ) {
+		
+			for( var j = 0; j < filterValues.length; j++ ) {
+			
+				var value = filterValues[j];
+				if( ( account.address && account.address.toLowerCase().indexOf( value ) != -1 ) ||
+					( account.name && account.name.toLowerCase().indexOf( value ) != -1 ) ||
+					( account.category && account.category.toLowerCase().indexOf( value ) != -1 ) ||
+					( account.industry && account.industry.toLowerCase().indexOf( value ) != -1 ) ) {
+					
+					filterArray.push(account);
+				}
+			}
+		} else {
+			filterArray.push(account);
+		}
+	}
+	
+	processAccount( filterArray );
+	
+	var markerCount = 0;
+	var acc = undefined;
+	for( var key in accountMarker ) {
 
-      for( var j = 0; j < filterValues.length; j++ ) {
+		markerCount = markerCount + 1;
+		if( !acc ) { 
+			acc = accountMap[key]; 
+			if( filterValues && filterValues.length != 0 ) { accountMarker[key].openPopup(); }
+		}
+	}
 
-        var value = filterValues[j];
-        if( ( account.address && account.address.toLowerCase().indexOf( value ) != -1 ) ||
-            ( account.name && account.name.toLowerCase().indexOf( value ) != -1 ) ||
-            ( account.category && account.category.toLowerCase().indexOf( value ) != -1 ) ||
-            ( account.industry && account.industry.toLowerCase().indexOf( value ) != -1 ) ) {
+	if( accounts.length != markerCount && markerCount > 0 ) {
 
-          filterArray.push(account);
-        }
-      }
-    } else {
-      filterArray.push(account);
-    }
-  }
+		startAnimate = false;
+		var range = 15;
 
-  processAccount( filterArray );
+		var latitude = earth.getPosition()[0];
+		var longitude = earth.getPosition()[1];            
 
-  var markerCount = 0;
-  var acc = undefined;
-  for( var key in accountMarker ) {
-
-    markerCount = markerCount + 1;
-    if( !acc ) {
-      acc = accountMap[key];
-      if( filterValues && filterValues.length != 0 ) { accountMarker[key].openPopup(); }
-    }
-  }
-
-  if( accounts.length != markerCount && markerCount > 0 ) {
-
-    startAnimate = false;
-    var range = 15;
-
-    var latitude = earth.getPosition()[0];
-    var longitude = earth.getPosition()[1];
-
-    earth.fitBounds([[latitude - range, longitude - range], [latitude + range, longitude + range]]);
-    earth.panInsideBounds([[latitude - range, longitude - range], [latitude + range, longitude + range]], {duration: 1});
-    earth.panTo( [acc.latitude, acc.longitude], {duration: 1} );
-  } else {
-    startAnimate = true;
-    earth.setView([30,-120], earthSize);
-  }
+		earth.fitBounds([[latitude - range, longitude - range], [latitude + range, longitude + range]]);
+		earth.panInsideBounds([[latitude - range, longitude - range], [latitude + range, longitude + range]], {duration: 1});
+		earth.panTo( [acc.latitude, acc.longitude], {duration: 1} );
+	} else {
+		startAnimate = true;
+		earth.setView([30,-120], earthSize);
+	}
 }
 
 function moveCards(barajaRef){
@@ -255,20 +258,27 @@ function onMarkerClick(event,account) {
 
   var barajaEl = $('#baraja-el');
   //barajaEl.show();
- var baraja = barajaEl.baraja();
+ var baraja = barajaEl.baraja().fan(
+ 	{speed:500,
+		easing : 'ease-out',
+		range : 10,
+		direction : 'right',
+		origin : { x : 25, y : 100 },
+		center : true,
+		scatter : false});
 
   if(baraja){
 
-  /* baraja.fan({
+ /* baraja.fan({
       speed:500,
       easing:'ease-out',
-      range:80,
+      range:90,
       direction:'right',
       origin:{x:x,y:y}
       //,
       //center:true
-    });*/
-
+    });
+*/
 
     /* baraja.fan( {
      speed : 500,
@@ -292,56 +302,52 @@ function onMarkerClick(event,account) {
 
 function initialize() {
 
-  earth = new WE.map('earth_div', {sky: true});
-  earth.setView([30,-120], earthSize);
-  earth.on('click', onEarthClick);
+	earth = new WE.map('earth_div', {sky: true});
+	earth.setView([30,-120], earthSize);
+	earth.on('click', onEarthClick);
 
-  var natural = WE.tileLayer('http://data.webglearth.com/natural-earth-color/{z}/{x}/{y}.jpg', {
-    tileSize: 256,
-    tms: true
-  });
-  natural.addTo(earth);
+	var natural = WE.tileLayer('http://data.webglearth.com/natural-earth-color/{z}/{x}/{y}.jpg', {
+		tileSize: 256,
+		tms: true
+	});
+	natural.addTo(earth);
 
-  var toner = WE.tileLayer('http://tile.stamen.com/toner/{z}/{x}/{y}.png', {
-    attribution: 'Servicemax Impact',
-    opacity: 0.5
-  });
-  toner.addTo(earth);
+	var toner = WE.tileLayer('http://tile.stamen.com/toner/{z}/{x}/{y}.png', {
+		attribution: 'Servicemax Impact',
+		opacity: 0.5
+	});
+	toner.addTo(earth);
 
-  var before = null;
-  requestAnimationFrame(function animate(now) {
+	var before = null;
+	requestAnimationFrame(function animate(now) {
 
-    var c = earth.getPosition();
-    var elapsed = before? now - before: 0;
-    before = now;
-    if( startAnimate === true ) {
-      earth.setCenter([c[0], c[1] + 0.1*(elapsed/30)]);
-    }
-    requestAnimationFrame(animate);
-  });
+		var c = earth.getPosition();
+		var elapsed = before? now - before: 0;
+		before = now;
+		if( startAnimate === true ) {
+			earth.setCenter([c[0], c[1] + 0.1*(elapsed/30)]);
+		}
+		requestAnimationFrame(animate);
+	});
 
-  function getContextPath() {
-    return window.location.pathname.substring(0, window.location.pathname.indexOf("/",2));
-  }
+	function getContextPath() {
+		return window.location.pathname.substring(0, window.location.pathname.indexOf("/",2));
+	}
 
-  var xmlhttp = new XMLHttpRequest();
-  var accountUrl = getContextPath() + "/account.json";
+	var xmlhttp = new XMLHttpRequest();
+	var accountUrl = getContextPath() + "/account.json";
 
-  //var xmlhttp = new XMLHttpRequest();
- // var accountUrl = getContextPath() + "/account.json";
-
-  xmlhttp.onreadystatechange = function() {
-
-    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-
-      accounts = JSON.parse(xmlhttp.responseText);
-      processAccount(accounts);
-    }
-  };
-  xmlhttp.open("GET", accountUrl, true);
-  xmlhttp.send();
+	xmlhttp.onreadystatechange = function() {
+	
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+		
+			accounts = JSON.parse(xmlhttp.responseText);
+			processAccount(accounts);
+		}
+	};
+	xmlhttp.open("GET", accountUrl, true);
+	xmlhttp.send();
 }
-
 
 function getMarkerClickDelegate(a, b) {
   return function(){
@@ -351,18 +357,16 @@ function getMarkerClickDelegate(a, b) {
 
 function processAccount(accs) {
 
+	/*accs=accs.filter(function(acc){
 
-  //Uncomment to see only with some image logos
-  /*accs=accs.filter(function(acc){
+		if(acc.logo) return acc;
+	});*/
 
-    if(acc.logo) return acc;
-  });
-  */
   accountMarker = {};
   for( var i = 0; i < accs.length; i++ ) {
 
     var acc = accs[i];
-    var marker = WE.marker([acc.latitude, acc.longitude], 'resources/images/map-of-orange-pin-icon-5081.png', 24, 24).addTo(earth);
+    var marker = WE.marker([acc.latitude, acc.longitude], 'resources/images/pin.png', 32, 32).addTo(earth);
     marker.on('click', getMarkerClickDelegate(event,acc));
     accountMarker[acc.license] = marker;
     accountMap[acc.license] = acc;
