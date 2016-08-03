@@ -121,6 +121,7 @@
 
 ul.baraja-container {
     width: 300px;
+    height: 200px;
 }
 .baraja-demo li img {
     display: block;
@@ -133,6 +134,6 @@ ul.baraja-container {
 }
 
 .baraja-demo p {
-
+    height: 0px !important;
      margin: 0px !important;
 }

@@ -27,10 +27,10 @@
 
   </head>
 
-  <body onload="" >
+  <body onload="/*initialize()*/" >
 
   <!-- Starwars -->
- <article class="starwars starwars-bg" >
+ <article class="starwars starwars-bg" ><!--style="display: none !important;"-->
   <audio preload="auto">
     <source src="resources/audio/Star_Wars_original_opening_crawl_1977.ogg" type="audio/ogg" />
     <source src="resources/audio/Star_Wars_original_opening_crawl_1977.mp3" type="audio/mpeg" />
@@ -115,11 +115,8 @@
 
 
 
-  <!-- Cards Template -->
-
-
-  <script id="cardTemplatesHtml" type="text/x-jquery-tmpl">
-    <li>
+  <!-- Cards Template
+  <li>
         {{if logo}}
       <img src="${logo}" height="30" width="130" style="height:35% !important"/>
         {{/if}}
@@ -131,10 +128,32 @@
 
        </li>
 
+  -->
+
+
+  <script id="cardTemplatesHtml" type="text/x-jquery-tmpl">
+
+ <li>
+        {{if logo}}
+      <img src="${logo}" height="30" width="200" style="height:100% !important"/>
+        {{/if}}
+
+       </li>
+
+   <li>
+        {{if name}}
+                <h4>${name} <small>(${industry})</small></h4>
+                <p>${address}</p>
+        {{/if}}
+
+       </li>
+
+
+
     {{if images.length >0 }}
      {{each images}}
         <li>
-            <img src="${$value}"  alt="" height="30" width="130"/>
+            <img src="${$value}"  alt="" style="height:100% !important;" height="100%" width="200"/>
         </li>
         {{/each}}
     {{/if}}
@@ -143,7 +162,7 @@
     {{if videos}}
     {{each videos}}
         <li>
-        <iframe  src="${$value}" alt="" style="height:50%" ></iframe>
+        <iframe  src="${$value}" alt="" style="height:100%" ></iframe>
         </li>
         {{/each}}
     {{/if}}

@@ -24,8 +24,8 @@
 }
 
 .baraja-demo ul.baraja-container li {
-	border-radius: 10px;
-	padding: 5px;
+	border-radius: 8px;
+	padding: 15px;
 	box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -39,34 +39,4 @@
 	margin: 0 auto;
 	width: 100%;
 	border-radius: 10px 10px 0 0;
-}
-
-
-.arrow_box {
-	position: relative;
-	background: #d56c11;
-	border: 2px solid #c2e1f5;
-}
-.arrow_box:after, .arrow_box:before {
-	bottom: 100%;
-	left: 50%;
-	border: solid transparent;
-	content: " ";
-	height: 0;
-	width: 0;
-	position: absolute;
-	pointer-events: none;
-}
-
-.arrow_box:after {
-	border-color: rgba(213, 108, 17, 0);
-	border-bottom-color: #d56c11;
-	border-width: 20px;
-	margin-left: -20px;
-}
-.arrow_box:before {
-	border-color: rgba(194, 225, 245, 0);
-	border-bottom-color: #c2e1f5;
-	border-width: 23px;
-	margin-left: -23px;
 }

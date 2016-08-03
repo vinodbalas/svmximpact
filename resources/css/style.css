@@ -256,7 +256,7 @@ svg:not(:root) {
 
 body {
   padding: 0;
-  background: #fff url('../images/bg.jpg') repeat-x;
+  background: #fff url('../images/bg.jpg') repeat !important;
 
   /*animation-name:mymove;
   animation-duration:1s;

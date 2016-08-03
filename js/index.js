@@ -258,27 +258,21 @@ function onMarkerClick(event,account) {
 
   var barajaEl = $('#baraja-el');
   //barajaEl.show();
- var baraja = barajaEl.baraja().fan(
- 	{speed:500,
-		easing : 'ease-out',
-		range : 10,
-		direction : 'right',
-		origin : { x : 25, y : 100 },
-		center : true,
-		scatter : false});
+ var baraja = barajaEl.baraja();
 
   if(baraja){
 
- /* baraja.fan({
-      speed:500,
-      easing:'ease-out',
-      range:90,
-      direction:'right',
-      origin:{x:x,y:y}
-      //,
-      //center:true
-    });
-*/
+	  baraja.fan( {
+		  speed : 500,
+		  easing : 'ease-out',
+		  range : 40,
+		  direction : 'right',
+		  origin : { minX : 20, maxX : 20, y : 100 },
+		  center : false,
+		  rotation:20,
+		  translation : 0
+	  } );
+
 
     /* baraja.fan( {
      speed : 500,
@@ -299,6 +293,68 @@ function onMarkerClick(event,account) {
 
   console.log("account",account);
 }
+
+
+var preloadPictures = function(pictureUrls, callback) {
+	var i,
+		j,
+		loaded = 0;
+
+	for (i = 0, j = pictureUrls.length; i < j; i++) {
+		(function (img, src) {
+			img.onload = function () {
+				if (++loaded == pictureUrls.length && callback) {
+					callback();
+				}
+			};
+
+			// Use the following callback methods to debug
+			// in case of an unexpected behavior.
+			img.onerror = function () {};
+			img.onabort = function () {};
+
+			img.src = src;
+		} (new Image(), pictureUrls[i]));
+	}
+};
+
+function loadData(){
+	function getContextPath() {
+		return window.location.pathname.substring(0, window.location.pathname.indexOf("/",2));
+	}
+
+	var xmlhttp = new XMLHttpRequest();
+	var accountUrl = getContextPath() + "/account.json";
+
+	xmlhttp.onreadystatechange = function() {
+
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+
+			accounts = JSON.parse(xmlhttp.responseText);
+
+			var imagesToPreLoad=[];
+				accounts.filter(function(item){
+					var imageList=[];
+					if(item.logo){
+						imageList.push(item.logo);
+					}
+					if(item.images){
+						imageList=imageList.concat(item.images);
+					}
+
+					imagesToPreLoad=imagesToPreLoad.concat(imageList);
+
+			})
+			preloadPictures(imagesToPreLoad);
+			//processAccount(accounts);
+		}
+	};
+	xmlhttp.open("GET", accountUrl, true);
+	xmlhttp.send();
+
+}
+
+loadData();
 
 function initialize() {
 
@@ -329,24 +385,8 @@ function initialize() {
 		}
 		requestAnimationFrame(animate);
 	});
+	processAccount(accounts);//Preload Data...
 
-	function getContextPath() {
-		return window.location.pathname.substring(0, window.location.pathname.indexOf("/",2));
-	}
-
-	var xmlhttp = new XMLHttpRequest();
-	var accountUrl = getContextPath() + "/account.json";
-
-	xmlhttp.onreadystatechange = function() {
-	
-		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-		
-			accounts = JSON.parse(xmlhttp.responseText);
-			processAccount(accounts);
-		}
-	};
-	xmlhttp.open("GET", accountUrl, true);
-	xmlhttp.send();
 }
 
 function getMarkerClickDelegate(a, b) {
